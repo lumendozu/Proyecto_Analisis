@@ -1,6 +1,10 @@
+import 'package:aplication/views/succes_view.dart';
 import 'package:flutter/material.dart';
-import 'animations/particle_animation.dart';
-import 'views/welcome_view.dart';
+import 'animations/animation_init/particle_animation.dart';
+import 'views/init_view.dart';
+import 'views/loading_view.dart';
+import 'views/failed_view.dart';
+//import 'views/succes_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,10 +17,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(),
+      theme: ThemeData(
+    		primarySwatch: Colors.blue,
+      	visualDensity: VisualDensity.adaptivePlatformDensity,
+			),
       home: const Scaffold(
         body: ParticleAnimation(
-          child: WelcomeView(),
+          child: PokemonListScreen(),
         ),
       ),
     );

@@ -9,23 +9,27 @@ class WelcomeView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.local_fire_department,
-                  color: Colors.amberAccent, size: 36),
-              const SizedBox(width: 10),
-              Text(
-                "Bienvenido",
-                style: TextStyle(
-                  fontSize: 34,
-                  color: Colors.orange[100],
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 350),
+					Column(
+						mainAxisSize: MainAxisSize.min,
+						children: [
+							Icon(
+								Icons.local_fire_department,
+								color: Colors.amberAccent,
+								size: 60, // Puedes ajustar el tamaño
+							),
+							const SizedBox(height: 10),
+							Text(
+								"Bienvenido",
+								style: TextStyle(
+									fontSize: 34,
+									color: Colors.orange[100],
+									fontWeight: FontWeight.bold,
+								),
+							),
+						],
+					),
+										
+          const SizedBox(height: 150),
           ElevatedButton(
             onPressed: () {},
             style: ElevatedButton.styleFrom(
@@ -47,7 +51,7 @@ class WelcomeView extends StatelessWidget {
                 return Colors.deepOrange;
               }),
             ),
-            child: const Text('🔥 Ingresar'),
+            child: const Text('Ingresar'),
           ),
         ],
       ),
