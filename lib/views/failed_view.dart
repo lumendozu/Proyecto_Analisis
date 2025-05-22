@@ -90,19 +90,6 @@ class _TierraErrorViewState extends State<TierraErrorView> with TickerProviderSt
                     color: Colors.brown[800],
                   ),
                 ),
-                const SizedBox(height: 30),
-                ElevatedButton.icon(
-                  onPressed: widget.onRetry ?? () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.refresh),
-                  label: const Text("Intentar de nuevo"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.brown[600],
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  ),
-                ),
               ],
             ),
           ),

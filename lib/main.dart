@@ -1,10 +1,10 @@
-import 'package:aplication/views/succes_view.dart';
+//import 'package:aplication/views/succes_view.dart';
 import 'package:flutter/material.dart';
 import 'animations/animation_init/particle_animation.dart';
 import 'views/init_view.dart';
 import 'views/loading_view.dart';
 import 'views/failed_view.dart';
-//import 'views/succes_view.dart';
+import 'views/contenedor_succes_view.dart/pokemon_list_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,7 +23,11 @@ class MyApp extends StatelessWidget {
 			),
       home: const Scaffold(
         body: ParticleAnimation(
-          child: PokemonListScreen(),
+				// PokemonListScreen
+				// WaterProgressLoader
+				// WelcomeView
+				// TierraErrorView	
+          child: WelcomeView(),
         ),
       ),
     );
