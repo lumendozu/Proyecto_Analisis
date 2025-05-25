@@ -10,8 +10,13 @@ abstract class SplashState extends Equatable {
 /// Estado inicial, antes de que comience la carga.
 class SplashInitial extends SplashState {}
 
-/// Estamos cargando (todavía no conocemos el resultado).
-class SplashLoading extends SplashState {}
+class SplashLoading extends SplashState {
+  final int progress; // de 0 a 100
+  const SplashLoading({this.progress = 0});
+  @override
+  List<Object?> get props => [progress];
+}
+
 
 /// Se cargó exitosamente la lista de pokémons.
 class SplashLoadSuccess extends SplashState {

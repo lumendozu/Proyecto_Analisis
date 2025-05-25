@@ -1,9 +1,8 @@
 import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../logic/pokemon_service_http.dart';
+import '../logic/pokemon_service_http.dart';
 import 'splash_event.dart';
 import 'splash_state.dart';
 
@@ -14,23 +13,30 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
       : _pokemonService = pokemonService,
         super(SplashInitial()) {
     on<SplashLoadPokemons>(_onLoadPokemons);
+    on<SplashUpdateProgress>(_onUpdateProgress);
   }
 
   Future<void> _onLoadPokemons(
       SplashLoadPokemons event, Emitter<SplashState> emit) async {
-    emit(SplashLoading());
+    emit(const SplashLoading(progress: 0));
 
     try {
+      final data = await _pokemonService.fetchPokemonsWithProgress(
+        onProgress: (current, total) {
+          final percent = ((current / total) * 100).round();
+          add(SplashUpdateProgress(percent));
+        },
+      );
 
-      // Intentar la llamada real al servicio:
-      final data = await _pokemonService.fetchPokemons();
-
-      // Si no lanza excepción, emitimos éxito:
       emit(const SplashLoadSuccess());
     } catch (e) {
-      // Si algo falla, emitimos estado de error con el mensaje:
       emit(SplashLoadFailure(e.toString()));
     }
+  }
+
+  void _onUpdateProgress(
+      SplashUpdateProgress event, Emitter<SplashState> emit) {
+    emit(SplashLoading(progress: event.progress));
   }
 }
 

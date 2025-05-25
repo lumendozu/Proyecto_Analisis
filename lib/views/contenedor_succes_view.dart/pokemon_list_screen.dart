@@ -25,7 +25,10 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
 
   Future<void> _loadPokemons() async {
     try {
-      final data = await _pokemonService.fetchPokemons();
+      final data = await _pokemonService.fetchPokemonsWithProgress(
+        onProgress: (current, total) {
+        },
+      );
       setState(() {
         pokemons = data;
       });
@@ -105,7 +108,7 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
               mainAxisSpacing: 10,
               childAspectRatio: 0.65,
             ),
-            itemCount: pokemons.length >= 130 ? 130 : pokemons.length,
+            itemCount: pokemons.length >= 30 ? 30 : pokemons.length,
             itemBuilder: (context, index) => PokemonCard(pokemon: pokemons[index]),
           ),
         ),
