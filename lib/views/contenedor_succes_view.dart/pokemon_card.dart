@@ -1,7 +1,6 @@
 // widgets/pokemon_card.dart
 import 'package:flutter/material.dart';
 
-
 class PokemonCard extends StatelessWidget {
   final Map<String, dynamic> pokemon;
 
@@ -16,7 +15,7 @@ class PokemonCard extends StatelessWidget {
       case 'grass':
         return Colors.greenAccent;
       case 'electric':
-        return Colors.yellow;
+        return Colors.amber;
       case 'psychic':
         return Colors.purpleAccent;
       case 'ice':
@@ -50,6 +49,23 @@ class PokemonCard extends StatelessWidget {
     }
   }
 
+//	Color getStatBarColor(Color baseColor) {
+//		final luminance = baseColor.computeLuminance();
+//		if (luminance > 0.6) {
+//			return Colors.black87;
+//		} else if (luminance < 0.1) {
+//			return Colors.white;
+//		} else {
+			// Para tonos medios usamos un color que resalte bien
+//			return baseColor.withRed(300); // Ej: hace el color más brillante
+//		}
+//	}
+
+
+  Color getStatBarColor(Color baseColor) {
+    return baseColor.computeLuminance() > 0.9 ? Colors.black : baseColor;
+  }
+
   @override
   Widget build(BuildContext context) {
     final String name = pokemon['name']?.toString() ?? 'Unknown';
@@ -65,11 +81,15 @@ class PokemonCard extends StatelessWidget {
         final width = constraints.maxWidth;
         final height = constraints.maxHeight;
         final baseSize = width < height ? width : height;
+				final Color textColor = const Color(0xFFB0C4DE); // Azul grisáceo claro
+				
+
+        final Color typeColor =
+            types.isNotEmpty ? getTypeColor(types[0]) : Colors.grey;
 
         return Card(
           elevation: 5,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           clipBehavior: Clip.antiAlias,
           child: Container(
             decoration: BoxDecoration(
@@ -77,12 +97,8 @@ class PokemonCard extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  types.isNotEmpty
-                      ? getTypeColor(types[0]).withOpacity(0.7)
-                      : Colors.grey.withOpacity(0.7),
-                  types.isNotEmpty
-                      ? getTypeColor(types[0]).withOpacity(0.3)
-                      : Colors.grey.withOpacity(0.3),
+                  typeColor.withOpacity(0.9),
+                  typeColor.withOpacity(0.1),
                 ],
               ),
             ),
@@ -91,28 +107,25 @@ class PokemonCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // ID + name
+                  // ID + Name
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Flexible(
-                        flex: 1,
-                        child: Text(
-                          '#${id.toString().padLeft(3, '0')}',
-                          style: TextStyle(
-                            fontSize: baseSize * 0.09,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[800],
-                          ),
+                      Text(
+                        '#${id.toString().padLeft(3, '0')}',
+                        style: TextStyle(
+                          fontSize: baseSize * 0.07,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[800],
                         ),
                       ),
-                      Flexible(
-                        flex: 2,
+                      Expanded(
                         child: Text(
                           name.toUpperCase(),
                           textAlign: TextAlign.right,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: baseSize * 0.09,
+                            fontSize: baseSize * 0.07,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
@@ -121,59 +134,73 @@ class PokemonCard extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: baseSize * 0.03),
-                  // Imagen
-                  Expanded(
+
+                  // Imagen con tamaño fijo
+                  SizedBox(
+                    height: baseSize * 0.58,
                     child: Center(
                       child: Image.network(
                         imageUrl,
                         fit: BoxFit.contain,
+                        width: baseSize * 0.6,
+                        errorBuilder: (_, __, ___) =>
+                            const Icon(Icons.error, color: Colors.white),
                         loadingBuilder: (context, child, progress) =>
                             progress == null
                                 ? child
                                 : const CircularProgressIndicator(),
-                        errorBuilder: (_, __, ___) =>
-                            const Icon(Icons.error, color: Colors.white),
                       ),
                     ),
                   ),
                   SizedBox(height: baseSize * 0.03),
-                  // Tipos
-                  if (types.isNotEmpty) ...[
-                    Wrap(
-                      spacing: baseSize * 0.02,
-                      children: types
-                          .map((type) => Chip(
-                                label: Text(
-                                  type.toUpperCase(),
-                                  style: TextStyle(
-                                    fontSize: baseSize * 0.06,
-                                    color: Colors.white,
-                                  ),
+
+                  // Tipos con chips optimizados
+                  Wrap(
+                    spacing: baseSize * 0.02,
+                    runSpacing: baseSize * 0.01,
+                    children: types.isNotEmpty
+                        ? types.map((type) {
+                            return Chip(
+                              label: Text(
+                                type.toUpperCase(),
+                                style: TextStyle(
+                                  fontSize: baseSize * 0.05,
+                                  color: Colors.white,
                                 ),
-                                backgroundColor:
-                                    getTypeColor(type).withOpacity(0.8),
-                              ))
-                          .toList(),
-                    ),
-                  ] else ...[
-                    Chip(
-                      label: Text(
-                        'UNKNOWN',
-                        style: TextStyle(
-                          fontSize: baseSize * 0.06,
-                          color: Colors.white,
-                        ),
-                      ),
-                      backgroundColor: Colors.grey,
-                    ),
-                  ],
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: baseSize * 0.03,
+                                vertical: baseSize * 0.01,
+                              ),
+                              backgroundColor: getTypeColor(type).withOpacity(0.8),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(baseSize * 0.02),
+                              ),
+                            );
+                          }).toList()
+                        : [
+                            Chip(
+                              label: Text(
+                                'UNKNOWN',
+                                style: TextStyle(
+                                  fontSize: baseSize * 0.05,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              backgroundColor: Colors.grey,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(baseSize * 0.02),
+                              ),
+                            ),
+                          ],
+                  ),
                   SizedBox(height: baseSize * 0.03),
+
                   // Stats
                   ...['hp', 'attack', 'defense'].map((stat) {
                     final int value = (stats[stat] as int?) ?? 0;
                     return Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: baseSize * 0.005),
+                      padding: EdgeInsets.symmetric(vertical: baseSize * 0.005),
                       child: Row(
                         children: [
                           SizedBox(
@@ -182,7 +209,7 @@ class PokemonCard extends StatelessWidget {
                               stat.toUpperCase(),
                               style: TextStyle(
                                 fontSize: baseSize * 0.06,
-                                color: Colors.white70,
+                          			color: Colors.grey[800],
                               ),
                             ),
                           ),
@@ -191,9 +218,7 @@ class PokemonCard extends StatelessWidget {
                               value: value / 100,
                               backgroundColor: Colors.grey[300],
                               valueColor: AlwaysStoppedAnimation<Color>(
-                                types.isNotEmpty
-                                    ? getTypeColor(types[0])
-                                    : Colors.grey,
+                                getStatBarColor(typeColor),
                               ),
                             ),
                           ),
@@ -204,7 +229,7 @@ class PokemonCard extends StatelessWidget {
                               textAlign: TextAlign.right,
                               style: TextStyle(
                                 fontSize: baseSize * 0.07,
-                                color: Colors.white,
+                          			color: Colors.grey[800],
                               ),
                             ),
                           ),
@@ -221,3 +246,4 @@ class PokemonCard extends StatelessWidget {
     );
   }
 }
+

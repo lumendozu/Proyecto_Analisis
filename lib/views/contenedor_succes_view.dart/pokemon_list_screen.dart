@@ -50,7 +50,7 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
       _showPokemonDialog(result);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Pokémon no encontrado en la lista de los 130 primero pokemones')),
+        const SnackBar(content: Text('Pokémon no encontrado en la lista de los 50 primero pokemones')),
       );
     }
   }
@@ -108,7 +108,7 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
               mainAxisSpacing: 10,
               childAspectRatio: 0.65,
             ),
-            itemCount: pokemons.length >= 30 ? 30 : pokemons.length,
+            itemCount: pokemons.length >= 50 ? 50 : pokemons.length,
             itemBuilder: (context, index) => PokemonCard(pokemon: pokemons[index]),
           ),
         ),
