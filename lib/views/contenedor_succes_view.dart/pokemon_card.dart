@@ -1,70 +1,16 @@
 // widgets/pokemon_card.dart
 import 'package:flutter/material.dart';
+import '../theme/pokemon_colors.dart';
 
 class PokemonCard extends StatelessWidget {
   final Map<String, dynamic> pokemon;
 
   const PokemonCard({super.key, required this.pokemon});
 
-  Color getTypeColor(String type) {
-    switch (type.toLowerCase()) {
-      case 'fire':
-        return Colors.redAccent;
-      case 'water':
-        return Colors.blueAccent;
-      case 'grass':
-        return Colors.greenAccent;
-      case 'electric':
-        return Colors.amber;
-      case 'psychic':
-        return Colors.purpleAccent;
-      case 'ice':
-        return Colors.lightBlueAccent;
-      case 'dragon':
-        return Colors.deepPurpleAccent;
-      case 'dark':
-        return Colors.brown;
-      case 'fairy':
-        return Colors.pinkAccent;
-      case 'normal':
-        return Colors.grey;
-      case 'fighting':
-        return Colors.orange;
-      case 'flying':
-        return Colors.lightBlue;
-      case 'poison':
-        return Colors.purple;
-      case 'ground':
-        return Colors.brown;
-      case 'rock':
-        return Colors.grey;
-      case 'bug':
-        return Colors.lightGreen;
-      case 'ghost':
-        return Colors.deepPurple;
-      case 'steel':
-        return Colors.blueGrey;
-      default:
-        return Colors.grey;
-    }
-  }
-
-//	Color getStatBarColor(Color baseColor) {
-//		final luminance = baseColor.computeLuminance();
-//		if (luminance > 0.6) {
-//			return Colors.black87;
-//		} else if (luminance < 0.1) {
-//			return Colors.white;
-//		} else {
-			// Para tonos medios usamos un color que resalte bien
-//			return baseColor.withRed(300); // Ej: hace el color más brillante
-//		}
-//	}
-
-
-  Color getStatBarColor(Color baseColor) {
-    return baseColor.computeLuminance() > 0.9 ? Colors.black : baseColor;
-  }
+	Color getTypeColor(String type) {
+  	return PokemonColors.getTypeColor(type);
+	}
+	
 
   @override
   Widget build(BuildContext context) {
@@ -81,8 +27,6 @@ class PokemonCard extends StatelessWidget {
         final width = constraints.maxWidth;
         final height = constraints.maxHeight;
         final baseSize = width < height ? width : height;
-				final Color textColor = const Color(0xFFB0C4DE); // Azul grisáceo claro
-				
 
         final Color typeColor =
             types.isNotEmpty ? getTypeColor(types[0]) : Colors.grey;
@@ -97,7 +41,7 @@ class PokemonCard extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  typeColor.withOpacity(0.9),
+                  typeColor.withOpacity(0.5),
                   typeColor.withOpacity(0.1),
                 ],
               ),
@@ -116,7 +60,7 @@ class PokemonCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: baseSize * 0.07,
                           fontWeight: FontWeight.bold,
-                          color: Colors.grey[800],
+													color: PokemonColors.azulGrisOscuro,
                         ),
                       ),
                       Expanded(
@@ -127,7 +71,7 @@ class PokemonCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: baseSize * 0.07,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+														color: PokemonColors.blanco,
                           ),
                         ),
                       ),
@@ -144,7 +88,7 @@ class PokemonCard extends StatelessWidget {
                         fit: BoxFit.contain,
                         width: baseSize * 0.6,
                         errorBuilder: (_, __, ___) =>
-                            const Icon(Icons.error, color: Colors.white),
+                            const Icon(Icons.error, color: PokemonColors.blanco),
                         loadingBuilder: (context, child, progress) =>
                             progress == null
                                 ? child
@@ -165,7 +109,7 @@ class PokemonCard extends StatelessWidget {
                                 type.toUpperCase(),
                                 style: TextStyle(
                                   fontSize: baseSize * 0.05,
-                                  color: Colors.white,
+                                  color: PokemonColors.blanco,
                                 ),
                               ),
                               padding: EdgeInsets.symmetric(
@@ -184,7 +128,7 @@ class PokemonCard extends StatelessWidget {
                                 'UNKNOWN',
                                 style: TextStyle(
                                   fontSize: baseSize * 0.05,
-                                  color: Colors.white,
+                                  color: PokemonColors.blanco,
                                 ),
                               ),
                               backgroundColor: Colors.grey,
@@ -209,7 +153,7 @@ class PokemonCard extends StatelessWidget {
                               stat.toUpperCase(),
                               style: TextStyle(
                                 fontSize: baseSize * 0.06,
-                          			color: Colors.grey[800],
+																color: PokemonColors.azulGrisOscuro,
                               ),
                             ),
                           ),
@@ -218,7 +162,7 @@ class PokemonCard extends StatelessWidget {
                               value: value / 100,
                               backgroundColor: Colors.grey[300],
                               valueColor: AlwaysStoppedAnimation<Color>(
-                                getStatBarColor(typeColor),
+																PokemonColors.getStatBarColor(typeColor),
                               ),
                             ),
                           ),
@@ -229,7 +173,8 @@ class PokemonCard extends StatelessWidget {
                               textAlign: TextAlign.right,
                               style: TextStyle(
                                 fontSize: baseSize * 0.07,
-                          			color: Colors.grey[800],
+																color: PokemonColors.azulGrisOscuro,
+																
                               ),
                             ),
                           ),
@@ -246,4 +191,5 @@ class PokemonCard extends StatelessWidget {
     );
   }
 }
+
 
